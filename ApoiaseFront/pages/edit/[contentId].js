@@ -56,7 +56,7 @@ export default function Detail() {
           <MainTemplate>
               <Container>
                 <Box px={6}>
-                  <Title>Postar no mural da campanha!</Title>
+                  <Title>Editar post do mural</Title>
                 </Box>
                 
               </Container>

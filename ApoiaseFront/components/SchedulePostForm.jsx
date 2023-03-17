@@ -83,15 +83,15 @@ const SchedulePostForm = (props) => {
                     }                    
                     </Box>
                     
-                    <Box width={1/4} px={2} mt='auto'>
+                    <Box width={1/2} px={2} mt='auto'>
                         {!props.isEdit &&        
-                        <PostAction postActionModeCallback={postActionModeCallback}/>
+                            <PostAction postActionModeCallback={postActionModeCallback}/>
                         }
                         {props.isEdit &&        
-                        <>
-                        <Datepicker readonly={props.isDateReadOnly} value={postDateTime}/>
-                        <div>update</div>
-                        </>
+                            <>
+                                <Datepicker readonly={props.isDateReadOnly} value={postDateTime}/>
+                                <div>update</div>
+                            </>
                         
                         }
                     </Box>

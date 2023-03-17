@@ -27,27 +27,27 @@ const PostAction = (postActionModeCallback) => {
     
     return(
 
-<Box width={1/4} px={2} mt='auto'>
-                        <Button onClick={(e) => handleClick(e)}>
-                            {buttonMessage}
-                        </Button>
-                        <Select onChange={(e) => handleModeChange(e.target.value)}
-                            id='modoPostagem'
-                            name='modoPostagem'
-                            defaultValue='Postar Agora'>
+        <Box px={2} mt='auto'>
+            <Button onClick={(e) => handleClick(e)}>
+                {buttonMessage}
+            </Button>
+            <Select onChange={(e) => handleModeChange(e.target.value)}
+                id='modoPostagem'
+                name='modoPostagem'
+                defaultValue='Postar Agora'>
 
-                            <option value="postar-agora"
-                                key={"postar-agora"} >
-                                Postar Agora
-                            </option>
+                <option value="postar-agora"
+                    key={"postar-agora"} >
+                    Postar Agora
+                </option>
 
-                            <option value="postar-futuro"
-                                key={"postar-futuro"} >
-                                Agendar Postagem
-                            </option>
-                        
-                            </Select>
-                    </Box>
+                <option value="postar-futuro"
+                    key={"postar-futuro"} >
+                    Agendar Postagem
+                </option>
+            
+                </Select>
+        </Box>
 
 );
 };
