@@ -31,8 +31,8 @@ export default function Post({ post }) {
             <p>{post.body}</p>
             <p>{post.publishDate}</p>
             <Link variant='nav' href={'/edit/' + post.id}>Editar</Link>
-            <Button onClick={e => onDelete(e.target.value) } value={post.id}>Deletar</Button>
-            <i onClick={e => onDelete(e.target.value) } value={post.id}><BsFillTrash3Fill /></i>
+            <Button onClick={e => onDelete(e.target.value) } value={post.id}><i onClick={e => onDelete(e.target.value) } value={post.id}><BsFillTrash3Fill /></i></Button>
+            
         </Card>
     
   );

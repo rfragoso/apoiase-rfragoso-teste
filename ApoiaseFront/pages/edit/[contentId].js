@@ -25,8 +25,9 @@ import {
 } from '@rebass/forms';
 import { useRouter } from 'next/router';
 import {Seed} from '../../seed';
-import {Container} from '../../components/style/sharedstyles';
+import {Container, Title} from '../../components/style/sharedstyles';
 import Post from '../../components/Post';
+import SchedulePostForm from '../../components/SchedulePostForm';
 
 const theme = {
   ...preset,
@@ -51,61 +52,17 @@ export default function Detail() {
   const isEditable = true;
 
     return (<ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <MainTemplate> 
-          <Container>
-              <Box
-                  as='form'
-                  onSubmit={e => e.preventDefault()}
-                  py={3}>
-                  <Flex mx={-2} mb={3}>
-                      <Box width={1} px={2}>
-                          <Label htmlFor='title'>Título</Label>
-                          <Input
-                              type='text'
-                              id='title'
-                              name='title'
-                              placeholder='Título'
-                              value={title}
-                              onChange={(e) => setTitle(e.target.value)}
-                          />
-                      </Box>
-                  </Flex>
-                  <Flex mx={-2} mb={3}>
-                      <Box width={1} px={2}>
-                          <Label htmlFor='body'>Conteúdo</Label>
-                          <Textarea
-                              id='body'
-                              name='body'
-                              placeholder='Conteúdo'
-                              value={body}
-                              onChange={(e) => setBody(e.target.value)}
-                          />
-                      </Box>
-                  </Flex>
-                  <Flex mx={-2} mb={3}>
-                      <Box width={1/4} px={2}>
-                          <Label htmlFor='publishDate'>Data e hora</Label>
-                          <Input
-                              type='datetime-local'
-                              id='publishDate'
-                              name='publishDate'
-                              value={publishDate}
-                              onChange={(e) => setPublishDate(e.target.value)}
-                              readOnly={!isEditable}
-                          />
-                      </Box>
-                      <Box width={1/4} px={2} mt='auto'>
-                          <Button type="submit">
-                              Atualizar post
-                          </Button>
-                      </Box>
-                  </Flex>
-                  
-              </Box>
-          </Container>
-        </MainTemplate>
-      </ThemeProvider>)
+      <GlobalStyle />
+          <MainTemplate>
+              <Container>
+                <Box px={6}>
+                  <Title>Postar no mural da campanha!</Title>
+                </Box>
+                
+              </Container>
+              <SchedulePostForm isDateReadOnly={true} isEdit={true} post={post}></SchedulePostForm>
+          </MainTemplate>
+    </ThemeProvider>)
       }else{
         return(<div>Vazio</div>)
       }

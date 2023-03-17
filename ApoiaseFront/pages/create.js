@@ -33,7 +33,7 @@ export default function Create() {
                   </Box>
                   
                 </Container>
-                <SchedulePostForm></SchedulePostForm>
+                <SchedulePostForm isDateReadOnly={false} isEdit={false}></SchedulePostForm>
             </MainTemplate>
       </ThemeProvider>)
 }

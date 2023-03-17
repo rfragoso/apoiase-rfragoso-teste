@@ -7,29 +7,34 @@ import {Container, LabelForm, InputForm, TextareaForm} from '../components/style
 import {Label, Input, Select, Textarea, Radio, Checkbox, } from '@rebass/forms';
 import {Box, Flex, Heading, Text, Button, Image, Card, } from 'rebass/styled-components';
 import Datepicker from './Datepicker';
+import PostAction from './PostAction';
 
 const initialValue = {
     titulo: '',
     conteudo: '',
     dataHora: '',
 }
-const SchedulePostForm = () => {
-    const [values, setValues] = useState(initialValue);
+const SchedulePostForm = (props) => {
+    alert("props.post:" + props.post.title);
+    const [postDateTime, setPostDateTime] = useState(props.value)
 
-    function onChange(ev) {
-        const { name, value } = ev.target;
-
-        console.log({name, value})
+    const [Title, setTitle] = useState(props.post.title);
+    const [Body, setBody] = useState();
+    
+    /*if(props.post != null)
+    {
+        setTitle(props.post.title);
+        setBody(props.post.body);
     }
-
-    function onSubmit(ev){
-        ev.preventDefault();
-
-        /*axios.post('url', values)
-        .then((response) =>{
-
-        });*/
-    }
+    */
+    //alert("state:" + postDateTime);
+    
+    const [postActionMode, setPostActionMode] = useState("postar-agora");
+    
+    function postActionModeCallback(value){
+        //alert("Externo: " + value)
+        setPostActionMode(value);       
+    }  
 
     return(
         <Container>
@@ -46,7 +51,7 @@ const SchedulePostForm = () => {
                             id='title'
                             name='title'
                             placeholder='Título'
-                            onChange={onChange}
+                            value={Title}
                         />
                     </Box>
                 </Flex>
@@ -57,19 +62,31 @@ const SchedulePostForm = () => {
                             id='body'
                             name='body'
                             placeholder='Conteúdo'
-                            onChange={onChange}
+                            value={Body}
                         />
                     </Box>
                 </Flex>
                 <Flex mx={-2} mb={3}>
                     <Box width={1/4} px={2}>
-                        <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
-                        <Datepicker />
+                    {postActionMode == "postar-futuro" &&        
+                        <>
+                            <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
+                            <Datepicker readonly={props.isDateReadOnly} value={postDateTime} />
+                        </>
+                    }                    
                     </Box>
+                    
                     <Box width={1/4} px={2} mt='auto'>
-                        <Button type="submit">
-                            Agendar post
-                        </Button>
+                        {!props.isEdit &&        
+                        <PostAction postActionModeCallback={postActionModeCallback}/>
+                        }
+                        {props.isEdit &&        
+                        <>
+                        <Datepicker readonly={props.isDateReadOnly} value={postDateTime}/>
+                        <div>update</div>
+                        </>
+                        
+                        }
                     </Box>
                     
                 </Flex>
