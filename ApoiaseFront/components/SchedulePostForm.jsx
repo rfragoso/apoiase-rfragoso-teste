@@ -15,11 +15,18 @@ const initialValue = {
     dataHora: '',
 }
 const SchedulePostForm = (props) => {
-    alert("props.post:" + props.post.title);
-    const [postDateTime, setPostDateTime] = useState(props.value)
+    
+    let tempTitle, tempBody, tempDate = "";
+    if(props.post != null)
+    {
+        tempTitle = props.post.title;
+        tempBody = props.post.body;
+        tempDate = props.post.publishDate;
+    }
+    const [postDateTime, setPostDateTime] = useState(tempDate)
 
-    const [Title, setTitle] = useState(props.post.title);
-    const [Body, setBody] = useState();
+    const [Title, setTitle] = useState(tempTitle);
+    const [Body, setBody] = useState(tempBody);
     
     /*if(props.post != null)
     {
