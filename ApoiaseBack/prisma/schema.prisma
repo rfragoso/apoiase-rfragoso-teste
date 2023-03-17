@@ -1,0 +1,16 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("APOIASE_DB_INFO_HOST")
+}
+
+model content {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  body  String
+  publishDate DateTime
+}
