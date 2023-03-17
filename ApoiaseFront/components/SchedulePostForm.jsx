@@ -8,6 +8,11 @@ import {Label, Input, Select, Textarea, Radio, Checkbox, } from '@rebass/forms';
 import {Box, Flex, Heading, Text, Button, Image, Card, } from 'rebass/styled-components';
 import Datepicker from './Datepicker';
 import PostAction from './PostAction';
+import {createPost} from '../services/api'
+
+import ReactModal from 'react-modal';
+import { func } from 'prop-types';
+
 
 const initialValue = {
     titulo: '',
@@ -23,18 +28,43 @@ const SchedulePostForm = (props) => {
         tempBody = props.post.body;
         tempDate = props.post.publishDate;
     }
-    const [postDateTime, setPostDateTime] = useState(tempDate)
-
+    
     const [Title, setTitle] = useState(tempTitle);
     const [Body, setBody] = useState(tempBody);
-    
-    /*if(props.post != null)
-    {
-        setTitle(props.post.title);
-        setBody(props.post.body);
+    const [postDateTime, setPostDateTime] = useState(tempDate)
+
+    const [modalIsOpen, setIsOpen] = useState(false);
+
+    function openModal() {
+        setIsOpen(true);
     }
-    */
-    //alert("state:" + postDateTime);
+
+    function afterOpenModal() {
+        // references are now sync'd and can be accessed.
+        //subtitle.style.color = '#f00';
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
+
+    function makeRequest()
+    {
+        console.log("makeRequest")
+        
+        console.log(Title)
+        console.log(Body)
+        console.log(postDateTime)
+        createPost(Title, Body, postDateTime);
+    }
+
+    function onChangePostDateTime()
+    {
+        alert("onChangePostDateTime 1");
+        //(e) => setPostDateTime(e.target.value)
+    }
+
+   
     
     const [postActionMode, setPostActionMode] = useState("postar-agora");
     
@@ -59,6 +89,7 @@ const SchedulePostForm = (props) => {
                             name='title'
                             placeholder='Título'
                             value={Title}
+                            onChange={(e) => setTitle(e.target.value)}
                         />
                     </Box>
                 </Flex>
@@ -70,6 +101,7 @@ const SchedulePostForm = (props) => {
                             name='body'
                             placeholder='Conteúdo'
                             value={Body}
+                            onChange={(e) => setBody(e.target.value)}
                         />
                     </Box>
                 </Flex>
@@ -78,7 +110,7 @@ const SchedulePostForm = (props) => {
                     {postActionMode == "postar-futuro" &&        
                         <>
                             <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
-                            <Datepicker readonly={props.isDateReadOnly} value={postDateTime} />
+                            <Datepicker readonly={props.isDateReadOnly} value={postDateTime} onChange={onChangePostDateTime} />
                         </>
                     }                    
                     </Box>
@@ -91,14 +123,25 @@ const SchedulePostForm = (props) => {
                             <>
                                 <Datepicker readonly={props.isDateReadOnly} value={postDateTime}/>
                                 <div>update</div>
+                                
+                                
                             </>
                         
                         }
                     </Box>
                     
                 </Flex>
-                
+                <button onClick={openModal}>Open Modal</button> 
+                <button onClick={makeRequest}>Make Request</button> 
             </Box>
+            <ReactModal
+
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}    
+        contentLabel="Example Modal">
+            <div><h1>Olá</h1><button onClick={closeModal}>close</button></div>
+            </ReactModal>
         </Container>
     );
 };
