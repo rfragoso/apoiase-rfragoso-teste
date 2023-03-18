@@ -8,10 +8,10 @@ import {Label, Input, Select, Textarea, Radio, Checkbox, } from '@rebass/forms';
 import {Box, Flex, Heading, Text, Button, Image, Card, } from 'rebass/styled-components';
 import Datepicker from './Datepicker';
 import PostAction from './PostAction';
-import {createPost} from '../services/api'
+import {createPost, editPost} from '../services/api'
 
-import ReactModal from 'react-modal';
-import { func } from 'prop-types';
+import ReactModal from 'react-modal'
+import { func } from 'prop-types'
 
 
 const initialValue = {
@@ -20,6 +20,7 @@ const initialValue = {
     dataHora: '',
 }
 const SchedulePostForm = (props) => {
+    
     
     let tempTitle, tempBody, tempDate = "";
     if(props.post != null)
@@ -32,6 +33,22 @@ const SchedulePostForm = (props) => {
     const [Title, setTitle] = useState(tempTitle);
     const [Body, setBody] = useState(tempBody);
     const [postDateTime, setPostDateTime] = useState(tempDate)
+
+    let inputProps
+    if(props.isEdit){
+        inputProps = {
+            disabled: true,
+            value: moment(postDateTime).format('DD/MM/YYYY hh:mm:ss')
+        };
+    }else{
+        inputProps = {
+            placeholder: new Date(),
+            disabled: false,
+            value: moment(new Date()).format('DD/MM/YYYY hh:mm:ss')
+            
+        };
+    }
+    
 
     const [modalIsOpen, setIsOpen] = useState(false);
 
@@ -55,7 +72,12 @@ const SchedulePostForm = (props) => {
         console.log(Title)
         console.log(Body)
         console.log(postDateTime)
-        createPost(Title, Body, postDateTime);
+        if(!props.isEdit){
+            createPost(Title, Body, postDateTime);
+        }else{
+            editPost(props.post.id, Title, Body, moment(postDateTime));
+        }
+        
     }
 
     function onChangePostDateTime()
@@ -110,7 +132,7 @@ const SchedulePostForm = (props) => {
                     {postActionMode == "postar-futuro" &&        
                         <>
                             <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
-                            <Datepicker readonly={props.isDateReadOnly} value={postDateTime} onChange={onChangePostDateTime} />
+                            <Datetime onChange={setPostDateTime} inputProps={ inputProps } />
                         </>
                     }                    
                     </Box>
@@ -121,10 +143,8 @@ const SchedulePostForm = (props) => {
                         }
                         {props.isEdit &&        
                             <>
-                                <Datepicker readonly={props.isDateReadOnly} value={postDateTime}/>
-                                <div>update</div>
-                                
-                                
+                                <Datetime inputProps={ inputProps } value={postDateTime} />
+                                <div><button className='btn'>Editar</button></div>
                             </>
                         
                         }

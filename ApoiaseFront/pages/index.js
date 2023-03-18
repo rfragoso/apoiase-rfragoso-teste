@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect} from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import MainTemplate from '../templates/MainTemplate';
@@ -18,18 +18,31 @@ import {
 } from 'rebass/styled-components'
 import PostsList from '../components/PostsList';
 import { Seed, SeedHistorico } from '../seed';
-
-
+import axios from "axios";
 
 const theme = {
   ...preset,
 }
 
 export default function Home() {
+  const [ posts, setPosts ] = useState([]);
+//Extrair a chamada do axios para uma função / Criar o onDeletePostCallback e nele chamar a função do axios / passar o callback como parametro de postlist e repassar para o post / ao clicar no delete executar o delete e ao final chamar o callback
+  useEffect(() => {
+    axios.get("http://localhost:3333/content/")
+      .then((response) => {
+        console.log(response.data)
+        setPosts(response.data)
+      })
+    .catch((err) => {
+      console.error("erro")
+    });
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
         <MainTemplate>
+          <PostsList posts={posts} ></PostsList>
           <PostsList posts={Seed} ></PostsList>
           <PostsList posts={SeedHistorico} ></PostsList>
         </MainTemplate>

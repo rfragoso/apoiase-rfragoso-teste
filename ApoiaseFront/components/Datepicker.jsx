@@ -32,7 +32,7 @@ function renderInput(props) {
   */
   return (
     <div>
-      <InputForm {...props} onChange={(e) => (alert(e))} />
+      <input {...props} />
       
     </div>
   );

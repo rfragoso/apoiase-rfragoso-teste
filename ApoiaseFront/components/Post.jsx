@@ -12,6 +12,7 @@ import {
     Card,
   } from 'rebass/styled-components';
 import { Container } from './style/sharedstyles';
+import { deletePost } from '../services/api';
 
 export default function Post({ post }) {
   const handleEdit = () => {
@@ -19,7 +20,8 @@ export default function Post({ post }) {
   };
 
   function onDelete(params) {
-    console.log(params)
+    alert(params.target.value)
+    deletePost(params.target.value)
   }
   return (
         <Card 
@@ -31,7 +33,7 @@ export default function Post({ post }) {
             <p>{post.body}</p>
             <p>{post.publishDate}</p>
             <Link variant='nav' href={'/edit/' + post.id}>Editar</Link>
-            <Button onClick={e => onDelete(e.target.value) } value={post.id}><i onClick={e => onDelete(e.target.value) } value={post.id}><BsFillTrash3Fill /></i></Button>
+            <Button onClick={() => deletePost(post.id) } value={post.id}><i><BsFillTrash3Fill /></i></Button>
             
         </Card>
     

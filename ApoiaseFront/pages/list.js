@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect} from 'react';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import MainTemplate from '../templates/MainTemplate';
@@ -17,6 +17,8 @@ import {
 } from 'rebass/styled-components'
 import PostsList from '../components/PostsList';
 import {Seed} from '../seed';
+import api, { getPostList } from '../services/api';
+import axios from "axios";
 
 const theme = {
   ...preset,
@@ -27,10 +29,22 @@ const theme = {
 
 
 export default function List() {
+  const [ posts, setPosts ] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:3333/content/")
+      .then((response) => {
+        console.log(response.data)
+        setPosts(response.data)
+      })
+    .catch((err) => {
+      console.error("erro")
+    });
+  }, []);
     return (<ThemeProvider theme={theme}>
         <GlobalStyle />
         <MainTemplate>
-          <PostsList posts={Seed} ></PostsList>
+          <PostsList posts={posts} ></PostsList>
         </MainTemplate>
       </ThemeProvider>)
 }
