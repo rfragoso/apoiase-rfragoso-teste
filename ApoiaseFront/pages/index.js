@@ -26,9 +26,16 @@ const theme = {
 
 export default function Home() {
   const [ posts, setPosts ] = useState([]);
-//Extrair a chamada do axios para uma função / Criar o onDeletePostCallback e nele chamar a função do axios / passar o callback como parametro de postlist e repassar para o post / ao clicar no delete executar o delete e ao final chamar o callback
-  useEffect(() => {
-    axios.get("http://localhost:3333/content/")
+//Extrair a chamada do axios para uma função 
+// Criar o onDeletePostCallback e nele chamar a função do axios 
+// passar o callback como parametro de postlist e repassar para o post 
+// ao clicar no delete executar o delete e ao final chamar o callback
+
+function onDeletePostCallback(){
+  loadPosts();
+}
+function loadPosts(){
+  axios.get("http://localhost:3333/content/")
       .then((response) => {
         console.log(response.data)
         setPosts(response.data)
@@ -36,13 +43,17 @@ export default function Home() {
     .catch((err) => {
       console.error("erro")
     });
-  }, []);
+}
+loadPosts();
+  /*useEffect(() => {
+    loadPosts();
+  }, []);*/
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
         <MainTemplate>
-          <PostsList posts={posts} ></PostsList>
+          <PostsList posts={posts} onDeletePostCallback={onDeletePostCallback} ></PostsList>
           <PostsList posts={Seed} ></PostsList>
           <PostsList posts={SeedHistorico} ></PostsList>
         </MainTemplate>

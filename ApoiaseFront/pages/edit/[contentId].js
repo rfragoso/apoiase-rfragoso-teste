@@ -40,6 +40,15 @@ export default function Detail() {
 
   const [ post, setPost ] = useState();
 
+  /*axios.get("http://localhost:3333/content/" + contentId)
+      .then((response) => {
+        console.log(response.data)
+        setPost(response.data)
+      })
+    .catch((err) => {
+      console.error("erro")
+    });*/
+
   useEffect(() => {
     axios.get("http://localhost:3333/content/" + contentId)
       .then((response) => {

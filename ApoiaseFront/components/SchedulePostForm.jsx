@@ -12,22 +12,20 @@ import {createPost, editPost} from '../services/api'
 
 import ReactModal from 'react-modal'
 import { func } from 'prop-types'
+import Router from 'next/router'
 
 
-const initialValue = {
-    titulo: '',
-    conteudo: '',
-    dataHora: '',
-}
 const SchedulePostForm = (props) => {
     
     
-    let tempTitle, tempBody, tempDate = "";
+    let tempTitle, tempBody = "";
+    let tempDate = moment();
+    
     if(props.post != null)
     {
         tempTitle = props.post.title;
         tempBody = props.post.body;
-        tempDate = props.post.publishDate;
+        tempDate = moment(props.post.publishDate);
     }
     
     const [Title, setTitle] = useState(tempTitle);
@@ -38,16 +36,29 @@ const SchedulePostForm = (props) => {
     if(props.isEdit){
         inputProps = {
             disabled: true,
-            value: moment(postDateTime).format('DD/MM/YYYY hh:mm:ss')
+            value: postDateTime.format('DD/MM/YYYY hh:mm:ss')
         };
     }else{
         inputProps = {
-            placeholder: new Date(),
             disabled: false,
-            value: moment(new Date()).format('DD/MM/YYYY hh:mm:ss')
+            value: postDateTime.format('DD/MM/YYYY hh:mm:ss')
             
         };
     }
+
+    const customStyles = {
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+          textAlign: 'center',
+          borderRadius: '20px',
+          padding: '5rem',
+        },
+      };
     
 
     const [modalIsOpen, setIsOpen] = useState(false);
@@ -68,23 +79,33 @@ const SchedulePostForm = (props) => {
     function makeRequest()
     {
         console.log("makeRequest")
-        
-        console.log(Title)
-        console.log(Body)
-        console.log(postDateTime)
+        //alert(postDateTime.diff(moment(), 'minutes'))
         if(!props.isEdit){
-            createPost(Title, Body, postDateTime);
+            if(postDateTime.diff(moment(), 'minutes') >= 5){
+                createPost(Title, Body, postDateTime);
+                resetPost();
+            }else{
+                openModal()
+            }
+            
+
         }else{
             editPost(props.post.id, Title, Body, moment(postDateTime));
+            Router.push('/');
         }
         
     }
 
-    function onChangePostDateTime()
+    function onChangePostDateTime(e) 
     {
-        alert("onChangePostDateTime 1");
+        
+        setPostDateTime(e)
+        
+        
+
         //(e) => setPostDateTime(e.target.value)
     }
+    
 
    
     
@@ -94,6 +115,11 @@ const SchedulePostForm = (props) => {
         //alert("Externo: " + value)
         setPostActionMode(value);       
     }  
+    const resetPost = () =>{
+        setTitle("");
+        setBody("");
+        setPostDateTime(moment());
+    };
 
     return(
         <Container>
@@ -131,8 +157,9 @@ const SchedulePostForm = (props) => {
                     <Box width={1/4} px={2}>
                     {postActionMode == "postar-futuro" &&        
                         <>
+                        
                             <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
-                            <Datetime onChange={setPostDateTime} inputProps={ inputProps } />
+                            <Datetime onChange={onChangePostDateTime} inputProps={ inputProps } />
                         </>
                     }                    
                     </Box>
@@ -156,11 +183,15 @@ const SchedulePostForm = (props) => {
             </Box>
             <ReactModal
 
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}    
-        contentLabel="Example Modal">
-            <div><h1>Olá</h1><button onClick={closeModal}>close</button></div>
+                isOpen={modalIsOpen}
+                style={customStyles}
+                onAfterOpen={afterOpenModal}
+                onRequestClose={closeModal}    
+                contentLabel="Example Modal">
+                <div>
+                    <h1>Não foi possível agenda sua postagem</h1>
+                    <p>Por favor, selecione um horário pelo menos 5 minutos no futuro</p>
+                    <button onClick={closeModal}>close</button></div>
             </ReactModal>
         </Container>
     );
