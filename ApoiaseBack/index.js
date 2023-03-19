@@ -1,4 +1,5 @@
 const express = require('express')
+const moment = require('moment')
 const { PrismaClient } = require('@prisma/client')
 const app = express()
 
@@ -14,18 +15,27 @@ const prisma = new PrismaClient()
 // aqui é o express e a implementação do crud da API
 app.post(`/content`, async (req, res) => {
   let { title, body, publishDate } = req.body;
-
-  /*
-  só cadastra se:
-  não tiver 3 posts com data de publicação futura
-  for para mais de daqui a 5 minutos
-
-  se não, retorna o erro que aconteceu
-  */
+  console.log("publishDate: " + publishDate)
+  publishDate = moment(publishDate);
   
+  const isValidPublishDate = checkIfIsValidPublishDate(publishDate);
+  const isLessThanThree = await checkIfIsLessThanThree();
 
+  let errMsg = "";
+  if(!isValidPublishDate)
+  {
+    errMsg += "<p>Por favor, selecione um horário pelo menos 5 minutos no futuro.</p>"
+  }
+  if(!isLessThanThree)
+  {
+    errMsg += "<p>Não é possível agendar mais de 3 postagens.</p>"
+  }
+
+  if(isValidPublishDate && isLessThanThree){
   
-  publishDate = new Date(publishDate);
+  //console.log("diffMinutes: " + diffMinutes)
+  publishDate = publishDate.format();
+  //if(diffMinutes >= 5){
   const content = await prisma.content.create({
     data: {
       title,
@@ -34,6 +44,8 @@ app.post(`/content`, async (req, res) => {
     },
   })
   res.json(content)
+  }else
+  {res.json('"data" : {"erro":"'+errMsg+'"}')}
 })
 
 
@@ -41,7 +53,7 @@ app.put('/content/:id', async (req, res) => {
   const { id } = req.params
   let { title, body, publishDate } = req.body;
  
- 
+  
   /*
   só cadastra se:
   não tiver 3 posts com data de publicação futura
@@ -51,9 +63,6 @@ app.put('/content/:id', async (req, res) => {
   */
   
 
-
-  const d1 = new Date(2017, 2, 11, 11, 30);
-  console.log(d1.toString());
 
   try {    
     console.log("antes")
@@ -97,3 +106,28 @@ app.delete(`/content/:id`, async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+function checkIfIsValidPublishDate(publishDate)
+{
+  console.log("publishDate:" + moment(publishDate))
+  const diffMinutes = moment(publishDate).diff(moment(), "minutes")
+  console.log("diffMinutes:" + diffMinutes)
+  if(diffMinutes >= 5)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+}
+
+
+async function checkIfIsLessThanThree()
+{
+  count = await prisma.content.count();
+  console.log(count);
+  if(count < 3)
+  {return true;}
+  else{return false;}
+}

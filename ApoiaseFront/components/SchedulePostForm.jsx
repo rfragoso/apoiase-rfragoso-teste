@@ -15,6 +15,32 @@ import { func } from 'prop-types'
 import Router from 'next/router'
 
 
+
+async function makeRequest(req)
+    {
+        console.log("makeRequest")
+        console.log("req - on: " + req);
+        //alert(postDateTime.diff(moment(), 'minutes'))
+        if(!req.isEdit){
+            if(1==1){
+            //if(postDateTime.diff(moment(), 'minutes') >= 5){
+                console.log("************")
+                console.log("req.postDateTime: " + req.publishDate);
+                console.log("************")
+                await createPost(req.title, req.body, moment(req.publishDate).format());
+                //req.resetPost();
+            }else{
+                openModal()
+            }            
+        }else{
+            
+            await editPost(req.postId, req.title, req.body, moment(req.publishDate).format());
+            Router.push('/');
+        }
+        
+    }
+
+
 const SchedulePostForm = (props) => {
     
     
@@ -30,22 +56,22 @@ const SchedulePostForm = (props) => {
     
     const [Title, setTitle] = useState(tempTitle);
     const [Body, setBody] = useState(tempBody);
-    const [postDateTime, setPostDateTime] = useState(tempDate)
+    const [postDateTime, setPostDateTime] = useState(tempDate);
 
-    let inputProps
+
+    let inputProps;
     if(props.isEdit){
         inputProps = {
-            disabled: true,
-            value: postDateTime.format('DD/MM/YYYY hh:mm:ss')
+            disabled: (postDateTime.diff(moment(), 'minutes') > 5),
+           
         };
     }else{
         inputProps = {
             disabled: false,
-            value: postDateTime.format('DD/MM/YYYY hh:mm:ss')
-            
+           
         };
     }
-
+    
     const customStyles = {
         content: {
           top: '50%',
@@ -76,34 +102,12 @@ const SchedulePostForm = (props) => {
         setIsOpen(false);
     }
 
-    function makeRequest()
-    {
-        console.log("makeRequest")
-        //alert(postDateTime.diff(moment(), 'minutes'))
-        if(!props.isEdit){
-            if(postDateTime.diff(moment(), 'minutes') >= 5){
-                createPost(Title, Body, postDateTime);
-                resetPost();
-            }else{
-                openModal()
-            }
-            
-
-        }else{
-            editPost(props.post.id, Title, Body, moment(postDateTime));
-            Router.push('/');
-        }
-        
-    }
+    
 
     function onChangePostDateTime(e) 
     {
-        
+        console.log("onChangePostDateTime: " + e)
         setPostDateTime(e)
-        
-        
-
-        //(e) => setPostDateTime(e.target.value)
     }
     
 
@@ -112,7 +116,6 @@ const SchedulePostForm = (props) => {
     const [postActionMode, setPostActionMode] = useState("postar-agora");
     
     function postActionModeCallback(value){
-        //alert("Externo: " + value)
         setPostActionMode(value);       
     }  
     const resetPost = () =>{
@@ -120,7 +123,16 @@ const SchedulePostForm = (props) => {
         setBody("");
         setPostDateTime(moment());
     };
-
+    let req = 
+    {
+        postId: (props.post != null) ? (props.post.id) : (0),
+        title: Title,
+        body: Body,
+        publishDate: postDateTime,
+        isEdit: props.isEdit,
+        resetPost: resetPost
+    }
+    //console.log("req - off: " + req);
     return(
         <Container>
             <Box
@@ -155,11 +167,10 @@ const SchedulePostForm = (props) => {
                 </Flex>
                 <Flex mx={-2} mb={3}>
                     <Box width={1/4} px={2}>
-                    {postActionMode == "postar-futuro" &&        
+                    {postActionMode == "postar-futuro" &&       
                         <>
-                        
                             <LabelForm htmlFor='publishDate'>Data e hora</LabelForm>
-                            <Datetime onChange={onChangePostDateTime} inputProps={ inputProps } />
+                            <Datetime onChange={setPostDateTime} inputProps={ inputProps } value={postDateTime} />
                         </>
                     }                    
                     </Box>
@@ -179,7 +190,7 @@ const SchedulePostForm = (props) => {
                     
                 </Flex>
                 <button onClick={openModal}>Open Modal</button> 
-                <button onClick={makeRequest}>Make Request</button> 
+                <button onClick={() => {makeRequest(req)}}>Make Request</button> 
             </Box>
             <ReactModal
 

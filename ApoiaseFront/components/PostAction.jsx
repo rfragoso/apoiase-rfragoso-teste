@@ -22,7 +22,7 @@ const PostAction = (postActionModeCallback) => {
 
     function handleClick(e)
     {
-        alert(currentAction);
+        //alert(currentAction);
     }
     
     return(

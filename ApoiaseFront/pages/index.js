@@ -32,6 +32,7 @@ export default function Home() {
 // ao clicar no delete executar o delete e ao final chamar o callback
 
 function onDeletePostCallback(){
+  console.log("onDeletePostCallback");
   loadPosts();
 }
 function loadPosts(){
@@ -44,18 +45,17 @@ function loadPosts(){
       console.error("erro")
     });
 }
-loadPosts();
-  /*useEffect(() => {
+  //loadPosts();
+  useEffect(() => {
     loadPosts();
-  }, []);*/
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
         <MainTemplate>
-          <PostsList posts={posts} onDeletePostCallback={onDeletePostCallback} ></PostsList>
-          <PostsList posts={Seed} ></PostsList>
-          <PostsList posts={SeedHistorico} ></PostsList>
+          <PostsList key="pl-01" posts={posts} onDeletePostCallback={onDeletePostCallback} ></PostsList>
+          
         </MainTemplate>
     </ThemeProvider>
   )

@@ -16,15 +16,19 @@ import { deletePost } from '../services/api';
 import Datetime from 'react-datetime';
 import moment from 'moment';
 
+async function onDelete(params, onDeletePostCallback) {
+  console.log("onDelete:" + params);
+  await deletePost(params);
+  onDeletePostCallback();
+  
+}
+
 export default function Post({ post, onDeletePostCallback }) {
   const handleEdit = () => {
     // Aqui você pode fazer algo com o objeto post, como navegar para a página de edição do post
   };
 
-  function onDelete(params) {
-    deletePost(params);
-    onDeletePostCallback();
-  }
+  
   return (
         <Card 
         width={1/2}
@@ -35,7 +39,7 @@ export default function Post({ post, onDeletePostCallback }) {
             <p>{post.body}</p>
             <p>{moment(post.publishDate).format('DD/MM/YYYY hh:mm:ss')}</p>
             <Link variant='nav' href={'/edit/' + post.id}>Editar</Link>
-            <Button  onClick={() => onDelete(post.id) } value={post.id}><i><BsFillTrash3Fill /></i></Button>
+            <Button  onClick={() => onDelete(post.id, onDeletePostCallback) } value={post.id}><i><BsFillTrash3Fill /></i></Button>
             
         </Card>
     

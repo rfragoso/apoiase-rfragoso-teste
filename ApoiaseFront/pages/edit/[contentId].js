@@ -37,8 +37,13 @@ const theme = {
 export default function Detail() {
   const router = useRouter()
   const {contentId} = router.query
-
+  //console.log("contentId: " + contentId);
+  //loadPostDetail(contentId);
   const [ post, setPost ] = useState();
+
+  useEffect(() => {
+    loadPostDetail(contentId);
+  }, []);
 
   /*axios.get("http://localhost:3333/content/" + contentId)
       .then((response) => {
@@ -49,17 +54,18 @@ export default function Detail() {
       console.error("erro")
     });*/
 
-  useEffect(() => {
+
+  function loadPostDetail(contentId)
+  {
     axios.get("http://localhost:3333/content/" + contentId)
       .then((response) => {
-        console.log(response.data)
+        //console.log(response.data)
         setPost(response.data)
       })
     .catch((err) => {
       console.error("erro")
     });
-  }, []);
-
+  }
    
   if(post != null){
 
