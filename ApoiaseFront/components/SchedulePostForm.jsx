@@ -16,7 +16,7 @@ async function makeRequest(req)
         console.log("req - on: " + req);
         //alert(postDateTime.diff(moment(), 'minutes'))
         if(!req.isEdit){
-            if(req.publishDate.diff(moment(), 'minutes') >= 5){
+            if(req.publishDate.diff(moment(), 'minutes') >= 5 || req.actionMode == 'postar-agora'){
                 try{
                     console.log("************")
                     console.log("req.postDateTime: " + req.publishDate);
@@ -62,13 +62,11 @@ const SchedulePostForm = (props) => {
     if(props.isEdit){
         inputProps = {
             disabled: (postDateTime.diff(moment(), 'minutes') < 5),
-           
         };
     }else{
         inputProps = {
             disabled: false,
             className: 'inputDatetime'
-           
         };
     }
     

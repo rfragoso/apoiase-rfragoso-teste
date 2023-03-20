@@ -40,7 +40,7 @@ async function loadPosts(){
   try {
     const response = await getPostList();
     console.log(response.data)
-        setPosts(response.data)
+      setPosts(response.data)
   } catch (error) {
     console.error("erro")
   }
