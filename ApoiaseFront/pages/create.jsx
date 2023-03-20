@@ -21,7 +21,7 @@ export default function Create() {
             <Title>Postar no mural da campanha!</Title>
           </Box>
         </Container>
-        <SchedulePostForm isDateReadOnly={false} isEdit={false} />
+        <SchedulePostForm isEdit={false} />
       </MainTemplate>
     </ThemeProvider>
   );

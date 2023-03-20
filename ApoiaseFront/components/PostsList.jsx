@@ -3,7 +3,7 @@ import Post from './Post';
 import { Container } from './style/sharedstyles';
 
 export default function PostsList({
-  title, posts, onEdit, onDeletePostCallback,
+  title, posts, onDeletePostCallback,
 }) {
   return (
     <Container>

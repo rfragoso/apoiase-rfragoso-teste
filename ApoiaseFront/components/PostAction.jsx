@@ -8,12 +8,12 @@ function PostAction({
   const [buttonMessage, setbuttonMessage] = useState('Postar agora');
   const [currentAction, setCurrentAction] = useState('postar-agora');
   function handleModeChange(value) {
-    if (value == 'postar-agora') {
+    if (value === 'postar-agora') {
       setbuttonMessage('Postar Agora');
       setCurrentAction(value);
       postActionModeCallback(value);
     }
-    if (value == 'postar-futuro') {
+    if (value === 'postar-futuro') {
       setbuttonMessage('Agendar Postagem');
       setCurrentAction(value);
       postActionModeCallback(value);

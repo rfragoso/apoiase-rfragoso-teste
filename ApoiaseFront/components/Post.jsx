@@ -4,7 +4,6 @@ import { BsFillTrash3Fill } from 'react-icons/bs';
 import {
   Box, Flex, Button, Card,
 } from 'rebass/styled-components';
-import Datetime from 'react-datetime';
 import moment from 'moment';
 import {
   H2, H3, P1, EditLink,
@@ -12,7 +11,6 @@ import {
 import { deletePost } from '../services/api';
 
 async function onDelete(params, onDeletePostCallback) {
-  console.log(`onDelete:${params}`);
   await deletePost(params);
   onDeletePostCallback();
 }
@@ -38,7 +36,11 @@ export default function Post({ post, onDeletePostCallback }) {
             justifyContent: 'end',
           }}
         >
-          <Button onClick={() => onDelete(post.id, onDeletePostCallback)} value={post.id}><i><BsFillTrash3Fill /></i></Button>
+          <Button
+            onClick={() => onDelete(post.id, onDeletePostCallback)}
+            value={post.id}>
+              <i><BsFillTrash3Fill /></i>
+          </Button>
         </Box>
       </Flex>
     </Card>

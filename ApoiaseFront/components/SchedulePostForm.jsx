@@ -6,9 +6,7 @@ import 'moment/locale/pt-br';
 import { Box, Flex } from 'rebass/styled-components';
 import ReactModal from 'react-modal';
 import Router from 'next/router';
-import {
-  Container, LabelForm, InputForm, TextareaForm,
-} from './style/sharedstyles';
+import { Container, LabelForm, InputForm, TextareaForm, } from './style/sharedstyles';
 import PostAction from './PostAction';
 import { createPost, editPost } from '../services/api';
 
@@ -55,8 +53,7 @@ async function makeRequest(req) {
 }
 
 function SchedulePostForm(props) {
-  let tempTitle; let
-    tempBody = '';
+  let tempTitle; let tempBody = '';
   let tempDate = moment();
 
   if (props.post != null) {
@@ -67,8 +64,10 @@ function SchedulePostForm(props) {
 
   const [Title, setTitle] = useState(tempTitle);
   const [Body, setBody] = useState(tempBody);
-  const [modalMessage, setModalMessage] = useState();
   const [postDateTime, setPostDateTime] = useState(tempDate);
+  const [modalMessage, setModalMessage] = useState();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [postActionMode, setPostActionMode] = useState('postar-agora');
 
   let inputProps;
   if (props.isEdit) {
@@ -96,15 +95,8 @@ function SchedulePostForm(props) {
     },
   };
 
-  const [modalIsOpen, setIsOpen] = useState(false);
-
   function openModal() {
     setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // subtitle.style.color = '#f00';
   }
 
   function checkIfIsPastDate() {
@@ -115,15 +107,7 @@ function SchedulePostForm(props) {
     setIsOpen(false);
   }
 
-  function onChangePostDateTime(e) {
-    console.log(`onChangePostDateTime: ${e}`);
-    setPostDateTime(e);
-  }
-
-  const [postActionMode, setPostActionMode] = useState('postar-agora');
-
   function doPostAction() {
-    console.log('doPostAction');
     makeRequest(req());
   }
 
@@ -148,7 +132,6 @@ function SchedulePostForm(props) {
       setModalMessage,
     });
   }
-  // console.log("req - off: " + req);
   return (
     <Container>
       <Box
@@ -191,12 +174,12 @@ function SchedulePostForm(props) {
         >
           <Box width={1 / 4} px={2}>
             {(postActionMode == 'postar-futuro' || props.isEdit)
-                        && (
-                        <>
-                          <LabelForm htmlFor="publishDate">Data e hora</LabelForm>
-                          <Datetime onChange={setPostDateTime} inputProps={inputProps} value={postDateTime} />
-                        </>
-                        )}
+                && (
+                <>
+                  <LabelForm htmlFor="publishDate">Data e hora</LabelForm>
+                  <Datetime onChange={setPostDateTime} inputProps={inputProps} value={postDateTime} />
+                </>
+              )}
           </Box>
 
           <Box width={1 / 2} px={2} mt="11px">
@@ -205,17 +188,10 @@ function SchedulePostForm(props) {
 
         </Flex>
       </Box>
-      <ReactModal
-
-        isOpen={modalIsOpen}
-        style={customStyles}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-      >
+      <ReactModal isOpen={modalIsOpen} style={customStyles} onRequestClose={closeModal} contentLabel="Example Modal" >
         <div>
           {modalMessage}
-          <button onClick={closeModal}>close</button>
+          <button onClick={closeModal}>Fechar</button>
         </div>
       </ReactModal>
     </Container>
