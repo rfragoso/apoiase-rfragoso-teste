@@ -24,6 +24,13 @@ export async function getPostedPostList() {
   });
 }
 
+export async function getUniquePost(loadcontentId) {
+  return axios({
+    method: 'get',
+    url: `http://localhost:3333/content/${loadcontentId}`,
+  });
+}
+
 export async function editPost(id, title, body, publishDate) {
   return axios({
     method: 'put',
