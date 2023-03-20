@@ -54,23 +54,15 @@ export default function Detail() {
       console.error("erro")
     }); */
 
-  function loadPostDetail(contentId) {
-    axios.get(`http://localhost:3333/content/${contentId}`)
+  function loadPostDetail(loadcontentId) {
+    axios.get(`http://localhost:3333/content/${loadcontentId}`)
       .then((response) => {
         // console.log(response.data)
         setPost(response.data);
-      })
-      .catch((err) => {
-        console.error('erro');
       });
   }
 
   if (post != null) {
-    /* const [title, setTitle] = useState(post.title);
-  const [body, setBody] = useState(post.body);
-  const [publishDate, setPublishDate] = useState(post.publishDate); */
-    const isEditable = true;
-
     return (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
