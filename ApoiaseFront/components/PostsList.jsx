@@ -2,14 +2,16 @@ import React from 'react';
 import Post from './Post';
 import { Container } from './style/sharedstyles';
 
-export default function PostsList({ posts, onEdit, onDeletePostCallback }) {
-    
-    return (
-        <Container>
-        {posts.map((post) => (
-            <Post key={post.id} post={post} onDeletePostCallback={onDeletePostCallback} />
-        ))}
-        </Container>
-      
-    );
-  }
+export default function PostsList({
+  title, posts, onEdit, onDeletePostCallback,
+}) {
+  return (
+    <Container>
+      <h2>{title}</h2>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} onDeletePostCallback={onDeletePostCallback} />
+      ))}
+    </Container>
+
+  );
+}

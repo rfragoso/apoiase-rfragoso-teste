@@ -7,29 +7,19 @@ function checkIfIsValidPublishDate(publishDate, actionMode){
   const diffMinutes = moment(publishDate).diff(moment(), "minutes")
   console.log("diffMinutes:" + diffMinutes)
   return diffMinutes >= 5 || actionMode == "postar-agora"
-  /*if(diffMinutes >= 5 || actionMode == "postar-agora"){
-      return true;
-    }
-    else{
-      return false;
-    }*/
 }
-
-
 async function checkIfIsLessThanThree(actionMode)
 {
+  date = moment(new Date() ).toDate()
   count = await prisma.content.count({
     where: {
-        publishDate: { gt: new Date() }
+        publishDate: { gt: date}
     }
     });
     console.log(count);
     
-    return (count < 3 || actionMode == "postar-agora");
+    return (count < 3);
   
-  /*if(count < 3)
-  {return true;}
-  else{return false;}*/
 }
 
 
@@ -49,14 +39,12 @@ const create = async (req, res) => {
     let errMsg = "";
     if(!isValidPublishDate){
         return res.json({ error: "Por favor, selecione um horário pelo menos 5 minutos no futuro." });
-        //errMsg += "<p>Por favor, selecione um horário pelo menos 5 minutos no futuro.</p>"
     }
-    if(!isLessThanThree){
-        return res.json({ error: "É permitido agendar somente 3 postagens." });
-        //errMsg += "<p>Não é possível agendar mais de 3 postagens.</p>"
+    if(!isLessThanThree && actionMode == "postar-futuro"){
+      return res.json({ error: "É permitido agendar somente 3 postagens." });  
     }
     
-    /*if(isValidPublishDate && isLessThanThree){*/
+    
         publishDate = publishDate.format();
         const content = await prisma.content.create({
             data: {
@@ -66,9 +54,6 @@ const create = async (req, res) => {
             },
         })
         res.json(content)
-    /*}else{
-        res.json('"data" : {"erro":"'+errMsg+'"}')
-    }*/
 }
 
 const edit = async (req, res) => {
@@ -89,9 +74,29 @@ const edit = async (req, res) => {
     }
 }
 
-const getAll = async(req, res) => {
-    contents = await prisma.content.findMany()
+const getPending = async(req, res) => {
+  console.log("Date: " + new Date());
+  contents = await prisma.content.findMany(
+    {
+      where: 
+      {
+        publishDate: { gt: new Date() }
+      }
+    }
+  )
     res.send(contents)
+}
+
+const getPosted = async(req, res) => {
+  contents = await prisma.content.findMany(
+    {
+      where: 
+      {
+        publishDate: { lt: new Date() }
+      }
+    }
+  )
+  res.send(contents)
 }
 
 const getUnique = async(req, res) => {
@@ -117,5 +122,5 @@ const deletePost = async (req, res) => {
 
 
 module.exports = {
-    create, edit, getAll, getUnique, deletePost
+    create, edit, getPending, getPosted, getUnique, deletePost
 }
