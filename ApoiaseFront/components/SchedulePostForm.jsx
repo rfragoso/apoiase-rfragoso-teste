@@ -16,31 +16,23 @@ async function makeRequest(req) {
   if (!req.isEdit) {
     if (req.publishDate.diff(moment(), 'minutes') >= 5 || req.actionMode === 'postar-agora') {
       try {
-        console.log('************');
-        console.log(`req.postDateTime: ${req.publishDate}`);
-        console.log('************');
-        console.log(`actionMode: ${req.actionMode}`);
         let date = moment(req.publishDate).format();
         date = (req.actionMode == 'postar-agora') ? (moment().format()) : (date);
         const createPostResult = await createPost(req.title, req.body, date, req.actionMode);
-
-        console.log('***');
-        console.log('***');
-        console.log(createPostResult.data);
-        console.log('***');
-        console.log('***');
         if (createPostResult.data.id != null) {
-          req.setModalMessage(<>
-            <h1>Sua postagem foi cadastrada</h1>
-            <p>Obrigado</p>
-
-          </>);
+          req.setModalMessage(
+            <>
+              <h1>Sua postagem foi cadastrada</h1>
+              <p>Obrigado</p>
+            </>,
+          );
         } else {
-          req.setModalMessage(<>
-            <h1>Não foi possível agenda sua postagem</h1>
-            <p>Não é possível agendar mais de 3 postagens</p>
-
-          </>);
+          req.setModalMessage(
+            <>
+              <h1>Não foi possível agenda sua postagem</h1>
+              <p>Não é possível agendar mais de 3 postagens</p>
+            </>,
+          );
         }
         req.resetPost();
       } catch (error) {
@@ -50,7 +42,6 @@ async function makeRequest(req) {
       req.setModalMessage(<>
         <h1>Não foi possível agenda sua postagem</h1>
         <p>Por favor, selecione um horário pelo menos 5 minutos no futuro</p>
-
       </>);
       req.openModal();
     }
