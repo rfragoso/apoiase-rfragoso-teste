@@ -1,7 +1,6 @@
-import React, { useState, useEffect} from 'react';
+import React from 'react';
 import Post from './Post';
 import { Container } from './style/sharedstyles';
-import { getPostList } from '../services/api';
 
 export default function PostsList({ posts, onEdit, onDeletePostCallback }) {
     

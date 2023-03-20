@@ -19,6 +19,7 @@ import {
 import PostsList from '../components/PostsList';
 import { Seed, SeedHistorico } from '../seed';
 import axios from "axios";
+import { getPostList } from '../services/api';
 
 const theme = {
   ...preset,
@@ -35,15 +36,14 @@ function onDeletePostCallback(){
   console.log("onDeletePostCallback");
   loadPosts();
 }
-function loadPosts(){
-  axios.get("http://localhost:3333/content/")
-      .then((response) => {
-        console.log(response.data)
+async function loadPosts(){
+  try {
+    const response = await getPostList();
+    console.log(response.data)
         setPosts(response.data)
-      })
-    .catch((err) => {
-      console.error("erro")
-    });
+  } catch (error) {
+    console.error("erro")
+  }
 }
   //loadPosts();
   useEffect(() => {

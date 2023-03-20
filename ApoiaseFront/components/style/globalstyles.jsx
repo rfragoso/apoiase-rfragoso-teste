@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
+import { PT_Sans } from 'next/font/google';
 
 const GlobalStyle = createGlobalStyle`
   html,

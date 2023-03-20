@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import {
   Box,
 } from 'rebass/styled-components'
+import { PT_Sans } from 'next/font/google';
 
 /*const Container = styled.div`
   padding: 0 0.5rem;
@@ -37,11 +38,13 @@ const Main = styled.main`
 `
 
 const Title = styled.h1`
-  margin: 0;
+  margin: 0 0 1.5rem 0;
   line-height: 1.15;
   font-size: 2.5rem;
   text-decoration: none;
-  color: #3d4749;
+  color: #555555;
+  font-family: ubuntu;
+  font-weight: 500;
 
   a {
     color: ${({ theme }) => theme.colors.secondary};
@@ -72,22 +75,69 @@ const LabelForm = styled.label`
   color: #3d4749;
   font-size: 1.2rem;
   font-weight: bold;
+  font-family: ubuntu;
+  font-weight: 500;
+  color: #555555;
+  
+
 `
 const InputForm = styled.input`
 border-radius: 5px;
-border: 1px solid #000;
+border: 1px solid #eaeaea;
 display: block;
 width: 100%;
 padding: 8px;
 font-size: inherit;
+font-family: ubuntu;
+font-weight: normal;
+color: #555555;
+background-color: #fcfcfc;
+margin-bottom: 1rem;
 `
 const TextareaForm = styled.textarea`
 border-radius: 5px;
-border: 1px solid #000;
+border: 1px solid #eaeaea;
 display: block;
 width: 100%;
 padding: 8px;
 font-size: inherit;
 height: 20vh;
+font-family: ubuntu;
+font-weight: normal;
+color: #555555;
+background-color: #fcfcfc;
 `
-export { Container, Main, Title, Description, CodeTag, LabelForm, InputForm, TextareaForm }
+const H2 = styled.h2`
+color: #555555;
+font-weight: 700;
+margin: 0 0 .5rem 0;
+
+font-size: 1.8rem;
+`
+
+const H3 = styled.h3`
+color: #555555;
+font-weight: 500;
+margin: 1rem 0 .5rem 0;
+border-bottom: 1px solid #eaeaea;
+`
+const P1 = styled.p`
+color: #555555;
+font-weight: normal;
+margin: 0 0 .5rem 0;
+`
+const EditLink = styled.span`
+a{
+  background-color: #00d062;
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 8px 0;
+  text-align: center;
+}
+
+`
+export { Container, Main, Title, Description, CodeTag, LabelForm, InputForm, TextareaForm, H2, H3, P1, EditLink }

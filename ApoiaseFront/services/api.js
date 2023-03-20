@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function createPost(title, body, publishDate)
+export async function createPost(title, body, publishDate, actionMode)
 {
     console.log("createPost")
     console.log(title)
@@ -9,7 +9,7 @@ export async function createPost(title, body, publishDate)
     return await axios({
         method: 'post',
         url: 'http://localhost:3333/content/',
-        data: {"title": title, "body": body, "publishDate" : publishDate }
+        data: {"title": title, "body": body, "publishDate" : publishDate, "actionMode": actionMode }
     })
     /*
     .then(function (response) {

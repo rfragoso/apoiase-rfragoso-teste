@@ -19,7 +19,7 @@ export default function Create() {
         <GlobalStyle />
             <MainTemplate>
                 <Container>
-                  <Box px={6}>
+                  <Box px={6} sx={{fontFamily: 'PT Sans'}} >
                     <Title>Postar no mural da campanha!</Title>
                   </Box>
                 </Container>

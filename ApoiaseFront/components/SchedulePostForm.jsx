@@ -1,20 +1,14 @@
 import React, {useState} from 'react';
 import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
 import moment from 'moment';
 import 'moment/locale/pt-br';
-/*import axios from 'axios';*/
 import {Container, LabelForm, InputForm, TextareaForm} from '../components/style/sharedstyles';
-import {Label, Input, Select, Textarea, Radio, Checkbox, } from '@rebass/forms';
-import {Box, Flex, Heading, Text, Button, Image, Card, } from 'rebass/styled-components';
-import Datepicker from './Datepicker';
+import {Box, Flex } from 'rebass/styled-components';
 import PostAction from './PostAction';
 import {createPost, editPost} from '../services/api'
-
 import ReactModal from 'react-modal'
-import { func } from 'prop-types'
 import Router from 'next/router'
-
-
 
 async function makeRequest(req)
     {
@@ -22,15 +16,20 @@ async function makeRequest(req)
         console.log("req - on: " + req);
         //alert(postDateTime.diff(moment(), 'minutes'))
         if(!req.isEdit){
-            if(1==1){
-            //if(postDateTime.diff(moment(), 'minutes') >= 5){
-                console.log("************")
-                console.log("req.postDateTime: " + req.publishDate);
-                console.log("************")
-                await createPost(req.title, req.body, moment(req.publishDate).format());
-                //req.resetPost();
+            if(req.publishDate.diff(moment(), 'minutes') >= 5){
+                try{
+                    console.log("************")
+                    console.log("req.postDateTime: " + req.publishDate);
+                    console.log("************")
+                    console.log("actionMode: " + req.actionMode)
+                    await createPost(req.title, req.body, moment(req.publishDate).format(), req.actionMode);
+                    req.resetPost();
+                }catch(error){
+                    alert(error)
+                }
+                
             }else{
-                openModal()
+                //openModal()
             }            
         }else{
             
@@ -62,12 +61,13 @@ const SchedulePostForm = (props) => {
     let inputProps;
     if(props.isEdit){
         inputProps = {
-            disabled: (postDateTime.diff(moment(), 'minutes') > 5),
+            disabled: (postDateTime.diff(moment(), 'minutes') < 5),
            
         };
     }else{
         inputProps = {
             disabled: false,
+            className: 'inputDatetime'
            
         };
     }
@@ -130,6 +130,7 @@ const SchedulePostForm = (props) => {
         body: Body,
         publishDate: postDateTime,
         isEdit: props.isEdit,
+        actionMode: postActionMode,
         resetPost: resetPost
     }
     //console.log("req - off: " + req);
@@ -165,7 +166,13 @@ const SchedulePostForm = (props) => {
                         />
                     </Box>
                 </Flex>
-                <Flex mx={-2} mb={3}>
+                <Flex 
+                    mx={-2} 
+                    mb={3}
+                    sx={{
+                        justifyContent: 'end',
+                    }}
+                >
                     <Box width={1/4} px={2}>
                     {postActionMode == "postar-futuro" &&       
                         <>
@@ -175,13 +182,13 @@ const SchedulePostForm = (props) => {
                     }                    
                     </Box>
                     
-                    <Box width={1/2} px={2} mt='auto'>
+                    <Box width={1/2} px={2} mt='11px'>
                         {!props.isEdit &&        
                             <PostAction postActionModeCallback={postActionModeCallback}/>
                         }
                         {props.isEdit &&        
                             <>
-                                <Datetime inputProps={ inputProps } value={postDateTime} />
+                                <Datetime onChange={setPostDateTime} inputProps={ inputProps } value={postDateTime} />
                                 <div><button className='btn'>Editar</button></div>
                             </>
                         
