@@ -5,8 +5,12 @@ import { Select } from '@rebass/forms';
 function PostAction({
   postActionModeCallback, postActionMethod, isPastDate, isEdit,
 }) {
-  const [buttonMessage, setbuttonMessage] = useState('Postar agora');
-  const [currentAction, setCurrentAction] = useState('post-now');
+  const [buttonMessage, setbuttonMessage] = useState(
+    isPastDate ? 'Postar Agora' : 'Agendar Postagem',
+  );
+  const [currentAction, setCurrentAction] = useState(
+    isPastDate ? 'post-now' : 'post-future',
+  );
   function handleModeChange(value) {
     if (value === 'post-now') {
       setbuttonMessage('Postar Agora');
@@ -32,7 +36,7 @@ function PostAction({
           }}
           id="modoPostagem"
           name="modoPostagem"
-          defaultValue="Postar Agora"
+          defaultValue={currentAction}
           onChange={(e) => handleModeChange(e.target.value)}
         >
 
