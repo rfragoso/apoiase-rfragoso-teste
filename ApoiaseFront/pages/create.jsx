@@ -9,6 +9,7 @@ import { Container, Title } from '../components/style/sharedstyles';
 
 const theme = {
   ...preset,
+  breakpoints: ['40em', '52em', '64em'],
 };
 
 export default function Create() {
@@ -17,7 +18,7 @@ export default function Create() {
       <GlobalStyle />
       <MainTemplate>
         <Container>
-          <Box px={6}>
+          <Box px={[1, 3, 6]}>
             <Title>Postar no mural da campanha!</Title>
           </Box>
         </Container>

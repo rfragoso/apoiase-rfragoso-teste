@@ -34,7 +34,7 @@ export default function Detail() {
         <GlobalStyle />
         <MainTemplate>
           <Container>
-            <Box px={6}>
+            <Box px={[1, 3, 6]}>
               <Title>Editar post do mural</Title>
             </Box>
           </Container>

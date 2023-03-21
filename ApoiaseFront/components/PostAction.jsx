@@ -6,23 +6,18 @@ function PostAction({
   postActionModeCallback, postActionMethod, isPastDate, isEdit,
 }) {
   const [buttonMessage, setbuttonMessage] = useState('Postar agora');
-  const [currentAction, setCurrentAction] = useState('postar-agora');
+  const [currentAction, setCurrentAction] = useState('post-now');
   function handleModeChange(value) {
-    if (value === 'postar-agora') {
+    if (value === 'post-now') {
       setbuttonMessage('Postar Agora');
       setCurrentAction(value);
       postActionModeCallback(value);
     }
-    if (value === 'postar-futuro') {
+    if (value === 'post-future') {
       setbuttonMessage('Agendar Postagem');
       setCurrentAction(value);
       postActionModeCallback(value);
     }
-  }
-
-  function handleClick(e) {
-
-    // alert(currentAction);
   }
 
   const DropDownListButton = (
@@ -42,15 +37,15 @@ function PostAction({
         >
 
           <option
-            value="postar-agora"
-            key="postar-agora"
+            value="post-now"
+            key="post-now"
           >
             Postar Agora
           </option>
 
           <option
-            value="postar-futuro"
-            key="postar-futuro"
+            value="post-future"
+            key="post-future"
           >
             Agendar Postagem
           </option>

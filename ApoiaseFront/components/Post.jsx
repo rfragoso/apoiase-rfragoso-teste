@@ -17,7 +17,7 @@ async function onDelete(params, onDeletePostCallback) {
 
 export default function Post({ post, onDeletePostCallback }) {
   return (
-    <Card width={1 / 2} mb={4} p={3} sx={{ backgroundColor: '#fcfcfc' }}>
+    <Card width={[1, 0.75, 0.5]} mb={4} p={3} sx={{ backgroundColor: '#fcfcfc' }}>
       <H2>{post.title}</H2>
       <H3>Post Id</H3>
       <P1>{post.id}</P1>
@@ -27,7 +27,14 @@ export default function Post({ post, onDeletePostCallback }) {
       <P1>{moment(post.publishDate).format('DD/MM/YYYY hh:mm:ss')}</P1>
       <Flex mt={4}>
         <Box width={1 / 4}>
-          <EditLink><Link variant="nav" href={`/edit/${post.id}`}>Editar</Link></EditLink>
+          <EditLink>
+            <Link
+              variant="nav"
+              href={`/edit/${post.id}`}
+            >
+              Editar
+            </Link>
+          </EditLink>
         </Box>
         <Box
           width={3 / 4}
@@ -39,7 +46,9 @@ export default function Post({ post, onDeletePostCallback }) {
           <Button
             onClick={() => onDelete(post.id, onDeletePostCallback)}
             value={post.id}>
-              <i><BsFillTrash3Fill /></i>
+              <i>
+                <BsFillTrash3Fill />
+              </i>
           </Button>
         </Box>
       </Flex>

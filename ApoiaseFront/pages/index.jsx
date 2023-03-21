@@ -8,6 +8,7 @@ import { getPostList, getPostedPostList } from '../services/api';
 
 const theme = {
   ...preset,
+  breakpoints: ['40em', '52em', '64em'],
 };
 
 export default function Home() {

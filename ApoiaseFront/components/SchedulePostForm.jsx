@@ -3,32 +3,32 @@ import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
-import { Box, Flex } from 'rebass/styled-components';
+import { Box, Flex, Button } from 'rebass/styled-components';
 import ReactModal from 'react-modal';
 import Router from 'next/router';
-import { Container, LabelForm, InputForm, TextareaForm, } from './style/sharedstyles';
+import { Container, LabelForm, InputForm, TextareaForm, Title, P1 } from './style/sharedstyles';
 import PostAction from './PostAction';
 import { createPost, editPost } from '../services/api';
 
 async function makeRequest(req) {
   if (!req.isEdit) {
-    if (req.publishDate.diff(moment(), 'minutes') >= 5 || req.actionMode === 'postar-agora') {
+    if (req.publishDate.diff(moment(), 'minutes') >= 5 || req.actionMode === 'post-now') {
       try {
         let date = moment(req.publishDate).format();
-        date = (req.actionMode == 'postar-agora') ? (moment().format()) : (date);
+        date = (req.actionMode === 'post-now') ? (moment().format()) : (date);
         const createPostResult = await createPost(req.title, req.body, date, req.actionMode);
         if (createPostResult.data.id != null) {
           req.setModalMessage(
             <>
-              <h1>Sua postagem foi cadastrada</h1>
-              <p>Obrigado</p>
+              <Title>Sua postagem foi cadastrada</Title>
+              <P1>Obrigado</P1>
             </>,
           );
         } else {
           req.setModalMessage(
             <>
-              <h1>Não foi possível agenda sua postagem</h1>
-              <p>Não é possível agendar mais de 3 postagens</p>
+              <Title>Não foi possível agendar sua postagem</Title>
+              <P1>Não é possível agendar mais de 3 postagens</P1>
             </>,
           );
         }
@@ -37,16 +37,18 @@ async function makeRequest(req) {
         alert(error);
       }
     } else {
-      req.setModalMessage(<>
-        <h1>Não foi possível agenda sua postagem</h1>
-        <p>Por favor, selecione um horário pelo menos 5 minutos no futuro</p>
-      </>);
+      req.setModalMessage(
+        <>
+          <Title>Não foi possível agendar sua postagem</Title>
+          <P1>Por favor, selecione um horário pelo menos 5 minutos no futuro</P1>
+        </>,
+      );
       req.openModal();
     }
     req.openModal();
   } else {
     let date = moment(req.publishDate).format();
-    date = (req.actionMode == 'postar-agora') ? (moment().format()) : (date);
+    date = (req.actionMode === 'post-now') ? (moment().format()) : (date);
     await editPost(req.postId, req.title, req.body, date);
     Router.push('/');
   }
@@ -67,7 +69,7 @@ function SchedulePostForm(props) {
   const [postDateTime, setPostDateTime] = useState(tempDate);
   const [modalMessage, setModalMessage] = useState();
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [postActionMode, setPostActionMode] = useState('postar-agora');
+  const [postActionMode, setPostActionMode] = useState('post-now');
 
   let inputProps;
   if (props.isEdit) {
@@ -138,7 +140,7 @@ function SchedulePostForm(props) {
         as="form"
         onSubmit={(e) => e.preventDefault()}
         py={3}
-        px={6}
+        px={[1, 3, 6]}
       >
         <Flex mx={-2} mb={3}>
           <Box width={1} px={2}>
@@ -170,28 +172,51 @@ function SchedulePostForm(props) {
           mb={3}
           sx={{
             justifyContent: 'end',
+            flexDirection: ['column', 'row', 'row'],
           }}
         >
-          <Box width={1 / 4} px={2}>
-            {(postActionMode == 'postar-futuro' || props.isEdit)
+          <Box width={[1, 0.5, 0.25]} px={2}>
+            {(postActionMode === 'post-future' || props.isEdit)
                 && (
                 <>
                   <LabelForm htmlFor="publishDate">Data e hora</LabelForm>
-                  <Datetime onChange={setPostDateTime} inputProps={inputProps} value={postDateTime} />
+                  <Datetime
+                    onChange={setPostDateTime}
+                    inputProps={inputProps}
+                    value={postDateTime}
+                  />
                 </>
-              )}
+                )}
           </Box>
 
-          <Box width={1 / 2} px={2} mt="11px">
-            <PostAction postActionMethod={doPostAction} isEdit={props.isEdit} isPastDate={checkIfIsPastDate()} postActionModeCallback={postActionModeCallback} />
+          <Box width={[1, 0.75, 0.5]} px={2} mt="11px">
+            <PostAction
+              postActionMethod={doPostAction}
+              isEdit={props.isEdit}
+              isPastDate={checkIfIsPastDate()}
+              postActionModeCallback={postActionModeCallback}
+            />
           </Box>
 
         </Flex>
       </Box>
-      <ReactModal isOpen={modalIsOpen} style={customStyles} onRequestClose={closeModal} contentLabel="Example Modal" >
+      <ReactModal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        onRequestClose={closeModal}
+        contentLabel="Example Modal"
+      >
         <div>
           {modalMessage}
-          <button onClick={closeModal}>Fechar</button>
+          <Button
+            sx={{
+              marginTop: '2rem',
+              backgroundColor: '#00d062',
+            }}
+            onClick={closeModal}
+          >
+                Fechar
+          </Button>
         </div>
       </ReactModal>
     </Container>
