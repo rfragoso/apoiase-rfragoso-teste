@@ -55,7 +55,7 @@ async function makeRequest(req) {
 }
 
 function SchedulePostForm(props) {
-  let tempTitle; let tempBody = '';
+  let tempTitle; let tempBody;
   let tempDate = moment();
 
   if (props.post != null) {
@@ -144,12 +144,13 @@ function SchedulePostForm(props) {
       >
         <Flex mx={-2} mb={3}>
           <Box width={1} px={2}>
-            <LabelForm htmlFor="title">Título da postagem</LabelForm>
+            <LabelForm htmlFor="title">Título da postagem*</LabelForm>
             <InputForm
               type="text"
               id="title"
               name="title"
               placeholder="Título"
+              required
               value={Title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -157,11 +158,12 @@ function SchedulePostForm(props) {
         </Flex>
         <Flex mx={-2} mb={3}>
           <Box width={1} px={2}>
-            <LabelForm htmlFor="body">Conteúdo</LabelForm>
+            <LabelForm htmlFor="body">Conteúdo*</LabelForm>
             <TextareaForm
               id="body"
               name="body"
               placeholder="Conteúdo"
+              required
               value={Body}
               onChange={(e) => setBody(e.target.value)}
             />
